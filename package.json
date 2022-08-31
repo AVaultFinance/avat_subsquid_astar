@@ -1,0 +1,40 @@
+{
+  "name": "avat_subsquid_astar",
+  "private": true,
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "db:migrate": "npx squid-typeorm-migration apply",
+    "processor:start": "node lib/processor.js",
+    "query-node:start": "squid-graphql-server --subscriptions",
+    "typegen": "npx squid-evm-typegen --abi=src/abi/pair.json --output=src/abi/pair.ts",
+    "lint:prod": "eslint . --ext .ts --ignore-path .gitignore --max-warnings 0",
+    "release:dev": "sqd squid:release AvatSubsquidShiden@v0 --source https://github.com/AVaultFinance/Avat_Subsquid_Shiden.git#dev",
+    "release:main": "sqd squid:release AvatSubsquidShiden@v0 --source https://github.com/AVaultFinance/Avat_Subsquid_Shiden.git#main"
+  },
+  "dependencies": {
+    "@subsquid/archive-registry": "1.0.12",
+    "@subsquid/cli": "0.6.0",
+    "@subsquid/graphql-server": "2.1.0",
+    "@subsquid/ss58": "^0.1.1",
+    "@subsquid/substrate-processor": "1.6.0",
+    "@subsquid/typeorm-migration": "0.1.2",
+    "@subsquid/typeorm-store": "0.1.2",
+    "assert": "^2.0.0",
+    "big.js": "^6.2.1",
+    "ethers": "^5.6.4",
+    "dotenv": "^10.0.0",
+    "pg": "^8.7.3",
+    "typeorm": "0.3.9"
+  },
+  "devDependencies": {
+    "@types/big.js": "^6.1.5",
+    "@subsquid/typeorm-codegen": "0.1.1",
+    "@subsquid/substrate-metadata-explorer": "1.0.6",
+    "@subsquid/substrate-typegen": "1.2.2",
+    "@types/node": "16.11.47",
+    "typescript": "4.8.2"
+  }
+}
