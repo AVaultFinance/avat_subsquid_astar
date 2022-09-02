@@ -43,3 +43,7 @@ make serve
   }
 ]
 ```
+
+```md
+# npx sqd squid ls
+```
