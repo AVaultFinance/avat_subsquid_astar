@@ -1,20 +1,17 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_} from "typeorm"
 
 @Entity_()
-export class Price {
-  constructor(props?: Partial<Price>) {
+export class Bundle {
+  constructor(props?: Partial<Bundle>) {
     Object.assign(this, props)
   }
 
   @PrimaryColumn_()
   id!: string
 
+  /**
+   * Price of ETH usd: BigDecimal
+   */
   @Column_("text", {nullable: false})
-  address!: string
-
-  @Column_("text", {nullable: false})
-  symbol!: string
-
-  @Column_("text", {nullable: false})
-  priceUSD!: string
+  nativePrice!: string
 }

@@ -7,9 +7,9 @@ export async function getOrCreateToken(
   ctx: CommonHandlerContext<Store>,
   address: string
 ): Promise<Token> {
-  let token = await ctx.store.get(Token, address);
+  let token = await ctx.store.get(Token, address.toLowerCase());
   if (!token) {
-    const erc20 = new ERC20.Contract(ctx, address);
+    const erc20 = new ERC20.Contract(ctx, address.toLowerCase());
     const name = await erc20.name();
     const symbol = await erc20.symbol();
     const decimals = await erc20.decimals();

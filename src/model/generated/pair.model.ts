@@ -1,5 +1,13 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
+import * as marshal from "./marshal"
+import {Factory} from "./factory.model"
 import {Token} from "./token.model"
+import {PairHourData} from "./pairHourData.model"
+import {LiquidityPosition} from "./liquidityPosition.model"
+import {LiquidityPositionSnapshot} from "./liquidityPositionSnapshot.model"
+import {Mint} from "./mint.model"
+import {Burn} from "./burn.model"
+import {Swap} from "./swap.model"
 
 @Entity_()
 export class Pair {
@@ -8,10 +16,14 @@ export class Pair {
   }
 
   /**
-   * pair address + time(YYYY-MM-DD)
+   * pair address
    */
   @PrimaryColumn_()
   id!: string
+
+  @Index_()
+  @ManyToOne_(() => Factory, {nullable: false})
+  factory!: Factory
 
   /**
    * mirrored from the smart contract
@@ -41,4 +53,97 @@ export class Pair {
    */
   @Column_("text", {nullable: false})
   totalSupply!: string
+
+  /**
+   * derived liquidity: BigDecimal
+   */
+  @Column_("text", {nullable: false})
+  reserveNative!: string
+
+  /**
+   * BigDecimal
+   */
+  @Column_("text", {nullable: false})
+  reserveUSD!: string
+
+  /**
+   * Used for separating per pair reserves and global: BigDecimal
+   */
+  @Column_("text", {nullable: false})
+  trackedReserveNative!: string
+
+  /**
+   * Price in terms of the asset pair: BigDecimal
+   */
+  @Column_("text", {nullable: false})
+  token0Price!: string
+
+  /**
+   * BigDecimal
+   */
+  @Column_("text", {nullable: false})
+  token1Price!: string
+
+  /**
+   * lifetime volume stats: BigDecimal
+   */
+  @Column_("text", {nullable: false})
+  volumeToken0!: string
+
+  /**
+   * BigDecimal
+   */
+  @Column_("text", {nullable: false})
+  volumeToken1!: string
+
+  /**
+   * BigDecimal
+   */
+  @Column_("text", {nullable: false})
+  volumeUSD!: string
+
+  /**
+   * BigDecimal
+   */
+  @Column_("text", {nullable: false})
+  untrackedVolumeUSD!: string
+
+  @Column_("int4", {nullable: false})
+  txCount!: number
+
+  /**
+   * creation stats
+   */
+  @Column_("timestamp with time zone", {nullable: false})
+  createdAtTimestamp!: Date
+
+  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
+  createdAtBlockNumber!: bigint
+
+  /**
+   * Filed used to help derived relationship -- used to detect new exchanges
+   */
+  @Column_("int4", {nullable: false})
+  liquidityProviderCount!: number
+
+  /**
+   * derived fields
+   */
+  @OneToMany_(() => PairHourData, e => e.pair)
+  pairHourData!: PairHourData[]
+
+  @OneToMany_(() => LiquidityPosition, e => e.pair)
+  liquidityPositions!: LiquidityPosition[]
+
+  @OneToMany_(() => LiquidityPositionSnapshot, e => e.pair)
+  liquidityPositionSnapshots!: LiquidityPositionSnapshot[]
+
+  @OneToMany_(() => Mint, e => e.pair)
+  mints!: Mint[]
+
+  @OneToMany_(() => Burn, e => e.pair)
+  burns!: Burn[]
+
+  @OneToMany_(() => Swap, e => e.pair)
+  swaps!: Swap[]
 }
