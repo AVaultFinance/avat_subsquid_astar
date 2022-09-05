@@ -8,7 +8,7 @@ import { CHAIN_NODE, FACTORY_ADDRESSES, PAIR_ADDRESSES } from "./config/consts";
 import * as factoryABI from "./abis/factory";
 import * as pair from "./abis/pair";
 import { handleNewPair } from "./handle/pair/handleNewPair";
-import { Token } from "./model";
+import { Pair, Token } from "./model";
 import { handleTransfer } from "./handle/pair/handleTransfer";
 import { handleSync } from "./handle/pair/handleSync";
 import { handleSwap } from "./handle/pair/handleSwap";
@@ -37,6 +37,19 @@ FACTORY_ADDRESSES.forEach((FACTORY_ADDRESS) => {
   processor.addEvmLog(FACTORY_ADDRESS, {
     filter: [
       factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
+    ],
+  });
+});
+
+PAIR_ADDRESSES.forEach((PAIR_ADDRESS) => {
+  processor.addEvmLog(PAIR_ADDRESS, {
+    filter: [
+      pair.events["Transfer(address,address,uint256)"].topic,
+      pair.events["Sync(uint112,uint112)"].topic,
+      pair.events["Swap(address,uint256,uint256,uint256,uint256,address)"]
+        .topic,
+      pair.events["Mint(address,uint256,uint256)"].topic,
+      pair.events["Burn(address,uint256,uint256,address)"].topic,
     ],
   });
 });
@@ -104,7 +117,7 @@ async function isKnownPairContracts(store: Store, address: string) {
 }
 async function tryIsPairInvolved(store: Store, address: string) {
   try {
-    return (await store.countBy(Token, { id: address })) > 0;
+    return (await store.countBy(Pair, { id: address })) > 0;
   } catch {
     return false;
   }
