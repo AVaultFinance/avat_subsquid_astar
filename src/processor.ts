@@ -22,12 +22,7 @@ const processor = new SubstrateBatchProcessor()
     chain: CHAIN_NODE,
     archive: lookupArchive("astar", { release: "FireSquid" }),
   })
-  .setBlockRange({ from: 219500 })
-  // .addEvmLog("0xA9473608514457b4bF083f9045fA63ae5810A03E", {
-  //   filter: [
-  //     factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
-  //   ],
-  // });
+  .setBlockRange({ from: 1326430 })
   .addEvmLog("*", {
     filter: [
       pair.events["Transfer(address,address,uint256)"].topic,
