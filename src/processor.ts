@@ -99,9 +99,9 @@ async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
   if (FACTORY_ADDRESSES.has(contractAddress)) {
     ctx.log.info("FACTORY_ADDRESSES--: " + contractAddress);
     await handleNewPair(ctx);
-  } else if (PAIR_ADDRESSES.has(contractAddress)) {
-    ctx.log.info("PAIR_ADDRESSES--: " + contractAddress);
+  } else {
     if (await isKnownPairContracts(ctx.store, contractAddress)) {
+      ctx.log.info("PAIR_ADDRESSES--: " + contractAddress);
       switch (ctx.event.args.topics[0]) {
         case pair.events["Transfer(address,address,uint256)"].topic:
           await handleTransfer(ctx);
@@ -124,7 +124,5 @@ async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
           break;
       }
     }
-  } else {
-    ctx.log.info("others--: " + contractAddress);
   }
 }
