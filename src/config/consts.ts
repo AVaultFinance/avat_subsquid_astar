@@ -6,7 +6,7 @@ export const ONE_BI = 1n;
 export const ZERO_BD = BigDecimal(0);
 export const ONE_BD = BigDecimal(1);
 export const BI_18 = 1000000000000000000n;
-
+export const FACTORY_ADDRESS = "0xA9473608514457b4bF083f9045fA63ae5810A03E";
 export const FACTORY_ADDRESSES = new Set([
   "0xA9473608514457b4bF083f9045fA63ae5810A03E".toLowerCase(),
 ]);
