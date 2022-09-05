@@ -18,27 +18,27 @@ import { handleBurn } from "./handle/pair/handleBurn";
 
 const database = new TypeormDatabase();
 const processor = new SubstrateBatchProcessor()
-  .setBatchSize(500)
-  .setBlockRange({ from: 1424626 })
   .setDataSource({
     chain: CHAIN_NODE,
     archive: lookupArchive("astar", { release: "FireSquid" }),
   })
+  .setBatchSize(500)
+  .setBlockRange({ from: 1424626 })
   .addEvmLog("0xA9473608514457b4bF083f9045fA63ae5810A03E", {
     filter: [
       factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
     ],
-  })
-  .addEvmLog("*", {
-    filter: [
-      pair.events["Transfer(address,address,uint256)"].topic,
-      pair.events["Sync(uint112,uint112)"].topic,
-      pair.events["Swap(address,uint256,uint256,uint256,uint256,address)"]
-        .topic,
-      pair.events["Mint(address,uint256,uint256)"].topic,
-      pair.events["Burn(address,uint256,uint256,address)"].topic,
-    ],
   });
+// .addEvmLog("*", {
+//   filter: [
+//     pair.events["Transfer(address,address,uint256)"].topic,
+//     pair.events["Sync(uint112,uint112)"].topic,
+//     pair.events["Swap(address,uint256,uint256,uint256,uint256,address)"]
+//       .topic,
+//     pair.events["Mint(address,uint256,uint256)"].topic,
+//     pair.events["Burn(address,uint256,uint256,address)"].topic,
+//   ],
+// });
 // FACTORY_ADDRESSES.forEach((FACTORY_ADDRESS) => {
 //   processor.addEvmLog(FACTORY_ADDRESS, {
 //     filter: [
