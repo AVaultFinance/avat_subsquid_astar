@@ -1,5 +1,5 @@
 import { Big as BigDecimal } from "big.js";
-export const CHAIN_NODE = "wss://rpc.astar.network";
+export const CHAIN_NODE = "wss://astar.api.onfinality.io/public-ws";
 export const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
 export const ZERO_BI = 0n;
 export const ONE_BI = 1n;
