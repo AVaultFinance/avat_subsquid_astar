@@ -17,7 +17,7 @@ import { handleBurn } from "./handle/pair/handleBurn";
 
 const database = new TypeormDatabase();
 const processor = new SubstrateBatchProcessor()
-  .setBatchSize(500)
+  .setBatchSize(100)
   .setDataSource({
     chain: CHAIN_NODE,
     archive: lookupArchive("astar", { release: "FireSquid" }),
@@ -28,7 +28,7 @@ const processor = new SubstrateBatchProcessor()
       factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
     ],
   })
-  .addEvmLog("0x49d1DB92A8a1511A6eeb867221d801bC974A3073", {
+  .addEvmLog("*", {
     filter: [
       pair.events["Transfer(address,address,uint256)"].topic,
       pair.events["Sync(uint112,uint112)"].topic,
