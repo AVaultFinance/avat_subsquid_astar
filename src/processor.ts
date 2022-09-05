@@ -61,8 +61,10 @@ processor.run(database, async (ctx) => {
 async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
   const contractAddress = ctx.event.args.address.toLowerCase();
   if (FACTORY_ADDRESSES.has(contractAddress)) {
+    ctx.log.info("FACTORY_ADDRESSES--: " + FACTORY_ADDRESSES);
     await handleNewPair(ctx);
-  } else {
+  } else if (PAIR_ADDRESSES.has(contractAddress)) {
+    ctx.log.info("PAIR_ADDRESSES--: " + FACTORY_ADDRESSES);
     if (await isKnownPairContracts(ctx.store, contractAddress)) {
       switch (ctx.event.args.topics[0]) {
         case pair.events["Transfer(address,address,uint256)"].topic:
