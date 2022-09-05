@@ -19,7 +19,7 @@ import { handleBurn } from "./handle/pair/handleBurn";
 const database = new TypeormDatabase();
 const processor = new SubstrateBatchProcessor()
   .setBatchSize(500)
-  .setBlockRange({ from: 1000000 })
+  .setBlockRange({ from: 1424626 })
   .setDataSource({
     chain: CHAIN_NODE,
     archive: lookupArchive("astar", { release: "FireSquid" }),
