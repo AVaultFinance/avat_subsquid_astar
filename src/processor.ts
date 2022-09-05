@@ -1,6 +1,5 @@
 import { lookupArchive } from "@subsquid/archive-registry";
 import {
-  BatchContext,
   EvmLogHandlerContext,
   SubstrateBatchProcessor,
 } from "@subsquid/substrate-processor";
@@ -23,7 +22,7 @@ const processor = new SubstrateBatchProcessor()
     chain: CHAIN_NODE,
     archive: lookupArchive("astar", { release: "FireSquid" }),
   })
-  .setBlockRange({ from: 100000 })
+  .setBlockRange({ from: 219500 })
   // .addEvmLog("0xA9473608514457b4bF083f9045fA63ae5810A03E", {
   //   filter: [
   //     factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
