@@ -24,14 +24,7 @@ const processor = new SubstrateBatchProcessor()
   })
   .setBlockRange({ from: 1326430 })
   .addEvmLog("*", {
-    filter: [
-      pair.events["Transfer(address,address,uint256)"].topic,
-      pair.events["Sync(uint112,uint112)"].topic,
-      pair.events["Swap(address,uint256,uint256,uint256,uint256,address)"]
-        .topic,
-      pair.events["Mint(address,uint256,uint256)"].topic,
-      pair.events["Burn(address,uint256,uint256,address)"].topic,
-    ],
+    filter: [],
   });
 FACTORY_ADDRESSES.forEach((FACTORY_ADDRESS) => {
   processor.addEvmLog(FACTORY_ADDRESS, {
@@ -70,6 +63,25 @@ processor.run(database, async (ctx) => {
   }
 });
 
+const knownPairContracts: Set<string> = new Set();
+async function isKnownPairContracts(store: Store, address: string) {
+  if (knownPairContracts.has(address)) {
+    return true;
+  }
+  if (await tryIsPairInvolved(store, address)) {
+    knownPairContracts.add(address);
+    return true;
+  }
+  return false;
+}
+async function tryIsPairInvolved(store: Store, address: string) {
+  try {
+    return (await store.countBy(Pair, { id: address })) > 0;
+  } catch {
+    return false;
+  }
+}
+
 async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
   const contractAddress = ctx.event.args.address.toLowerCase();
   if (FACTORY_ADDRESSES.has(contractAddress)) {
@@ -102,23 +114,5 @@ async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
     }
   } else {
     ctx.log.info("others--: " + contractAddress);
-  }
-}
-const knownPairContracts: Set<string> = new Set();
-async function isKnownPairContracts(store: Store, address: string) {
-  if (knownPairContracts.has(address)) {
-    return true;
-  }
-  if (await tryIsPairInvolved(store, address)) {
-    knownPairContracts.add(address);
-    return true;
-  }
-  return false;
-}
-async function tryIsPairInvolved(store: Store, address: string) {
-  try {
-    return (await store.countBy(Pair, { id: address })) > 0;
-  } catch {
-    return false;
   }
 }
