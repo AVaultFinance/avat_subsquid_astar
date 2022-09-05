@@ -18,11 +18,11 @@ import { handleBurn } from "./handle/pair/handleBurn";
 const database = new TypeormDatabase();
 const processor = new SubstrateBatchProcessor()
   .setBatchSize(100)
+  .setBlockRange({ from: 1326430 })
   .setDataSource({
     chain: CHAIN_NODE,
     archive: lookupArchive("astar", { release: "FireSquid" }),
   })
-  .setBlockRange({ from: 1326430 })
   .addEvmLog("0xA9473608514457b4bF083f9045fA63ae5810A03E", {
     filter: [
       factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
@@ -38,43 +38,13 @@ const processor = new SubstrateBatchProcessor()
       pair.events["Burn(address,uint256,uint256,address)"].topic,
     ],
   });
-// .addEvmLog("0x49d1DB92A8a1511A6eeb867221d801bC974A3073", {
-//   filter: [
-//     pair.events["Transfer(address,address,uint256)"].topic,
-//     pair.events["Sync(uint112,uint112)"].topic,
-//     pair.events["Swap(address,uint256,uint256,uint256,uint256,address)"]
-//       .topic,
-//     pair.events["Mint(address,uint256,uint256)"].topic,
-//     pair.events["Burn(address,uint256,uint256,address)"].topic,
-//   ],
-// });
-// FACTORY_ADDRESSES.forEach((FACTORY_ADDRESS) => {
-//   processor.addEvmLog(FACTORY_ADDRESS, {
-//     filter: [
-//       factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
-//     ],
-//   });
-// });
-
-// PAIR_ADDRESSES.forEach((PAIR_ADDRESS) => {
-//   processor.addEvmLog(PAIR_ADDRESS, {
-//     filter: [
-//       pair.events["Transfer(address,address,uint256)"].topic,
-//       pair.events["Sync(uint112,uint112)"].topic,
-//       pair.events["Swap(address,uint256,uint256,uint256,uint256,address)"]
-//         .topic,
-//       pair.events["Mint(address,uint256,uint256)"].topic,
-//       pair.events["Burn(address,uint256,uint256,address)"].topic,
-//     ],
-//   });
-// });
 
 processor.run(database, async (ctx) => {
   for (const block of ctx.blocks) {
     for (const item of block.items) {
       if (item.kind === "event") {
         if (item.name === "EVM.Log") {
-          await handleEvmLogT({
+          await handleEvmLog({
             ...ctx,
             block: block.header,
             event: item.event,
@@ -103,7 +73,6 @@ async function tryIsPairInvolved(store: Store, address: string) {
     return false;
   }
 }
-async function handleEvmLogT(ctx: EvmLogHandlerContext<Store>) {}
 async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
   const contractAddress = ctx.event.args.address.toLowerCase();
   if (FACTORY_ADDRESSES.has(contractAddress)) {
@@ -134,7 +103,7 @@ async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
           break;
       }
     } else {
-      ctx.log.error(
+      ctx.log.info(
         "PAIR_ADDRESSES_ERROR--: " +
           contractAddress +
           "-----" +
