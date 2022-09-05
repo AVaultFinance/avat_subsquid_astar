@@ -18,8 +18,8 @@ import { handleBurn } from "./handle/pair/handleBurn";
 
 const database = new TypeormDatabase();
 const processor = new SubstrateBatchProcessor()
-  .setBatchSize(100)
-  .setBlockRange({ from: 100000 })
+  .setBatchSize(500)
+  .setBlockRange({ from: 1000000 })
   .setDataSource({
     chain: CHAIN_NODE,
     archive: lookupArchive("astar", { release: "FireSquid" }),
@@ -61,10 +61,10 @@ processor.run(database, async (ctx) => {
 async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
   const contractAddress = ctx.event.args.address.toLowerCase();
   if (FACTORY_ADDRESSES.has(contractAddress)) {
-    ctx.log.info("FACTORY_ADDRESSES--: " + FACTORY_ADDRESSES);
+    ctx.log.info("FACTORY_ADDRESSES--: " + contractAddress);
     await handleNewPair(ctx);
   } else if (PAIR_ADDRESSES.has(contractAddress)) {
-    ctx.log.info("PAIR_ADDRESSES--: " + FACTORY_ADDRESSES);
+    ctx.log.info("PAIR_ADDRESSES--: " + contractAddress);
     if (await isKnownPairContracts(ctx.store, contractAddress)) {
       switch (ctx.event.args.topics[0]) {
         case pair.events["Transfer(address,address,uint256)"].topic:
@@ -88,6 +88,8 @@ async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
           break;
       }
     }
+  } else {
+    ctx.log.info("others--: " + contractAddress);
   }
 }
 const knownPairContracts: Set<string> = new Set();
