@@ -8,9 +8,10 @@ export const ONE_BD = BigDecimal(1);
 export const BI_18 = 1000000000000000000n;
 
 export const FACTORY_ADDRESSES = new Set([
-  "0xc5b016c5597D298Fe9eD22922CE290A048aA5B75".toLowerCase(),
+  "0xA9473608514457b4bF083f9045fA63ae5810A03E".toLowerCase(),
 ]);
 export const PAIR_ADDRESSES = new Set([
+  "0x49d1DB92A8a1511A6eeb867221d801bC974A3073".toLowerCase(),
   "0x7644Bf8086d40eD430D5096305830aA97Be77268".toLowerCase(),
   "0x996D73aC8F97cf15BD476b77CB92ce47cA0E71Fe".toLowerCase(),
   "0xeee106Aa8a0DE519E8Eb21C66A5c2275b46b3F4d".toLowerCase(),

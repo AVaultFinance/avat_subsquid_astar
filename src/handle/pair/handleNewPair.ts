@@ -39,7 +39,9 @@ export async function handleNewPair(ctx: EvmLogHandlerContext<Store>) {
     await ctx.store.save(factory);
 
     const pairAddress = data.pair.toLowerCase();
+    ctx.log.trace(`FACTORY_ADDRESSES: ${FACTORY_ADDRESSES}`);
     if (PAIR_ADDRESSES.has(pairAddress)) {
+      ctx.log.trace(`PAIR_ADDRESSES: ${FACTORY_ADDRESSES}`);
       const token0 = await getOrCreateToken(ctx, data.token0);
       const token1 = await getOrCreateToken(ctx, data.token1);
       await getOrCreateToken(ctx, pairAddress);
