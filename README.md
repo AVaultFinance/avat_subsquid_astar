@@ -46,4 +46,6 @@ make serve
 
 ```md
 # npx sqd squid ls
+
+npx sqd squid logs AvatSubsquidShiden@v0 -f
 ```
