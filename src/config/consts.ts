@@ -11,10 +11,62 @@ export const FACTORY_ADDRESSES = new Set([
   "0xA9473608514457b4bF083f9045fA63ae5810A03E".toLowerCase(),
 ]);
 export const PAIR_ADDRESSES = new Set([
-  "0x49d1DB92A8a1511A6eeb867221d801bC974A3073".toLowerCase(), // ACA-ASTR LP
+  // symbol: 'BAI-USDC LP',
   "0x7644Bf8086d40eD430D5096305830aA97Be77268".toLowerCase(),
+  // symbol: 'DAI-USDC LP',
   "0x996D73aC8F97cf15BD476b77CB92ce47cA0E71Fe".toLowerCase(),
+  // symbol: 'BUSD-USDC LP',
   "0xeee106Aa8a0DE519E8Eb21C66A5c2275b46b3F4d".toLowerCase(),
+  // symbol: 'USDT-USDC LP',
+  "0xD72A602C714ae36D990dc835eA5F96Ef87657D5e".toLowerCase(),
+  // symbol: 'ARSW-USDC LP',
+  "0xBD13Fd873d36f7D2A349b35E6854E3183ede18ab".toLowerCase(),
+  // symbol: 'ARSW-USDT LP',
+  "0x7843ecd6F3234D72D0b7034DD9894b77c416c6EF".toLowerCase(),
+  // symbol: 'ARSW-BAI LP',
+  "0x8897D79334c2D517b83E7846da4B922E68fdA61B".toLowerCase(),
+  // symbol: 'ACA-ASTR LP',
+  "0x49d1DB92A8a1511A6eeb867221d801bC974A3073".toLowerCase(),
+  // symbol: 'USDT-WASTR LP',
+  "0x806f746a7c4293092ac7aa604347BE123322dF1e".toLowerCase(),
+  // symbol: 'USDC-WASTR LP',
+  "0xBB1290c1829007F440C771b37718FAbf309cd527".toLowerCase(),
+  // symbol: 'WETH-WASTR LP',
+  "0x87988EbDE7E661F44eB3a586C5E0cEAB533a2d9C".toLowerCase(),
+  // symbol: 'DAI-USDC LP',
+  "0x996D73aC8F97cf15BD476b77CB92ce47cA0E71Fe".toLowerCase(),
+  // symbol: 'ARSW-WASTR LP',
+  "0x50497E7181eB9e8CcD70a9c44FB997742149482a".toLowerCase(),
+  // symbol: 'DOT-USDC LP',
+  "0xF4119c3d9e65602bb34f2455644e45c98d29bB4b".toLowerCase(),
+  // symbol: 'DOT-WASTR LP',
+  "0x40E938688a121370092A06745704c112C5ee5791".toLowerCase(),
+  // symbol: 'MUUU-WASTR LP',
+  "0xb60a1827Db219729f837f2D0982B4CDb5a9bA4b1".toLowerCase(),
+  // symbol: 'KGL-WASTR LP',
+  "0xaa1fa6A811D82Fa4383b522b4aF4De3a5041063E".toLowerCase(),
+  // symbol: 'LAY-WASTR LP',
+  "0x78D5C2Adeb11BE00033Cc4EDB2C2889CF945415E".toLowerCase(),
+  // symbol: 'OUSD-USDC LP',
+  "0xCf83a3d83c1265780d9374e8a7c838fE22BD3DC6".toLowerCase(),
+  // symbol: 'BAI-USDC LP',
+  "0x7644Bf8086d40eD430D5096305830aA97Be77268".toLowerCase(),
+  // symbol: 'BAI-WASTR LP',
+  "0x3d78a6CCA5c717C0e8702896892f3522D0b07010".toLowerCase(),
+  // symbol: 'NIKA-WASTR LP',
+  "0xeF8B14e08c292cc552494ec428A75c8A3cd417B6".toLowerCase(),
+  // symbol: 'ORU-WASTR LP',
+  "0xaC4b7043DA7152726D54B0fB1628a2FFF73f874e".toLowerCase(),
+  // symbol: 'JPYC-WASTR LP',
+  "0xF041a8e6e27341F5f865a22f01Fa37e065c32156".toLowerCase(),
+  // symbol: 'WSDN-WASTR LP',
+  "0xCcEFDDfF4808F3e1e0340e19e43f1E9Fd088b3F2".toLowerCase(),
+  // symbol: 'MATIC-WASTR LP',
+  "0xCA59df939290421047876C917789afdB68D5D6f1".toLowerCase(),
+  // symbol: 'BNB-WASTR LP',
+  "0x92127ec0EbEF8B30378D757bbE8dCE18210B848B".toLowerCase(),
+  // symbol: 'WBTC-WASTR LP',
+  "0x61a49Ba86E168cD25cA795b07B0A93236BB25127".toLowerCase(),
 ]);
 
 export const WHITELIST: string[] = [
@@ -107,3 +159,58 @@ export const USDC = "0x6a2d262d56735dba19dd70682b39f6be9a931d98".toLowerCase();
 // wantAddress: '0x92127ec0EbEF8B30378D757bbE8dCE18210B848B'.toLowerCase(),
 // symbol: 'WBTC-WASTR LP',
 // wantAddress: '0x61a49Ba86E168cD25cA795b07B0A93236BB25127'.toLowerCase(),
+
+// "pairs": [
+//   {
+//     "id": "0x50497e7181eb9e8ccd70a9c44fb997742149482a",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0xba912abfb0d1599eee87e5926d05edb01142baf3",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0xbd13fd873d36f7d2a349b35e6854e3183ede18ab",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0xa7de92a140e0353bfe98cec639d6e41387a6a14f",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0x7843ecd6f3234d72d0b7034dd9894b77c416c6ef",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0xdc0b29cb77c225a2a7767f20d49721858fa9822f",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0xdd44213793eb90f868cbc9f41fa3129d446fd466",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0x00580d346870d5249b774e3d8761f5358a126969",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0xb571d2bf06a16d0905a67cb3ac34e282fe6cbc71",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0x0e9a14120520178400c63e65bc4498768e8be047",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0x18a4185f2b708d39c01bc4c8a614ff12d2d0d3f7",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0x34b0aa92bdb305a6e747b9f36c4e039be67d41db",
+//     "txCount": 0
+//   },
+//   {
+//     "id": "0x8897d79334c2d517b83e7846da4b922e68fda61b",
+//     "txCount": 0
+//   }
+// ]
