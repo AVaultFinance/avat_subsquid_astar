@@ -24,18 +24,6 @@ const processor = new SubstrateBatchProcessor()
   })
   .setBlockRange({ from: 1326430 })
   .addEvmLog("*", {
-    filter: [],
-  });
-FACTORY_ADDRESSES.forEach((FACTORY_ADDRESS) => {
-  processor.addEvmLog(FACTORY_ADDRESS, {
-    filter: [
-      factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
-    ],
-  });
-});
-
-PAIR_ADDRESSES.forEach((PAIR_ADDRESS) => {
-  processor.addEvmLog(PAIR_ADDRESS, {
     filter: [
       pair.events["Transfer(address,address,uint256)"].topic,
       pair.events["Sync(uint112,uint112)"].topic,
@@ -45,7 +33,26 @@ PAIR_ADDRESSES.forEach((PAIR_ADDRESS) => {
       pair.events["Burn(address,uint256,uint256,address)"].topic,
     ],
   });
+FACTORY_ADDRESSES.forEach((FACTORY_ADDRESS) => {
+  processor.addEvmLog(FACTORY_ADDRESS, {
+    filter: [
+      factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
+    ],
+  });
 });
+
+// PAIR_ADDRESSES.forEach((PAIR_ADDRESS) => {
+//   processor.addEvmLog(PAIR_ADDRESS, {
+//     filter: [
+//       pair.events["Transfer(address,address,uint256)"].topic,
+//       pair.events["Sync(uint112,uint112)"].topic,
+//       pair.events["Swap(address,uint256,uint256,uint256,uint256,address)"]
+//         .topic,
+//       pair.events["Mint(address,uint256,uint256)"].topic,
+//       pair.events["Burn(address,uint256,uint256,address)"].topic,
+//     ],
+//   });
+// });
 
 processor.run(database, async (ctx) => {
   for (const block of ctx.blocks) {

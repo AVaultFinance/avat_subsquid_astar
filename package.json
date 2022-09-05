@@ -12,7 +12,7 @@
     "typegen": "npx squid-evm-typegen --abi=src/abi/pair.json --output=src/abi/pair.ts",
     "lint:prod": "eslint . --ext .ts --ignore-path .gitignore --max-warnings 0",
     "release:dev": "sqd squid release AvatSubsquidASTAR@v0 --source https://github.com/AVaultFinance/avat_subsquid_astar.git#dev",
-    "release:main": "npx sqd squid release AvatSubsquidShiden@v0 --source https://github.com/AVaultFinance/avat_subsquid_astar.git#main -v",
+    "release:main": "npx sqd squid release AvatSubsquidShiden@v1 --source https://github.com/AVaultFinance/avat_subsquid_astar.git#main -v",
     "release:update": "npx sqd squid update AvatSubsquidShiden@v0 --source https://github.com/AVaultFinance/avat_subsquid_astar.git#main -v",
     "test": "node src/index.js"
   },
