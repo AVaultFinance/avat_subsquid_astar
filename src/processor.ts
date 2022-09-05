@@ -38,6 +38,16 @@ const processor = new SubstrateBatchProcessor()
       pair.events["Burn(address,uint256,uint256,address)"].topic,
     ],
   });
+// .addEvmLog("0x49d1DB92A8a1511A6eeb867221d801bC974A3073", {
+//   filter: [
+//     pair.events["Transfer(address,address,uint256)"].topic,
+//     pair.events["Sync(uint112,uint112)"].topic,
+//     pair.events["Swap(address,uint256,uint256,uint256,uint256,address)"]
+//       .topic,
+//     pair.events["Mint(address,uint256,uint256)"].topic,
+//     pair.events["Burn(address,uint256,uint256,address)"].topic,
+//   ],
+// });
 // FACTORY_ADDRESSES.forEach((FACTORY_ADDRESS) => {
 //   processor.addEvmLog(FACTORY_ADDRESS, {
 //     filter: [
@@ -64,7 +74,7 @@ processor.run(database, async (ctx) => {
     for (const item of block.items) {
       if (item.kind === "event") {
         if (item.name === "EVM.Log") {
-          await handleEvmLog({
+          await handleEvmLogT({
             ...ctx,
             block: block.header,
             event: item.event,
@@ -93,7 +103,7 @@ async function tryIsPairInvolved(store: Store, address: string) {
     return false;
   }
 }
-
+async function handleEvmLogT(ctx: EvmLogHandlerContext<Store>) {}
 async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
   const contractAddress = ctx.event.args.address.toLowerCase();
   if (FACTORY_ADDRESSES.has(contractAddress)) {
