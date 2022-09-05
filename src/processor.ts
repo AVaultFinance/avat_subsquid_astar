@@ -23,6 +23,11 @@ const processor = new SubstrateBatchProcessor()
     archive: lookupArchive("astar", { release: "FireSquid" }),
   })
   .setBlockRange({ from: 1326430 })
+  .addEvmLog("0xA9473608514457b4bF083f9045fA63ae5810A03E", {
+    filter: [
+      factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
+    ],
+  })
   .addEvmLog("*", {
     filter: [
       pair.events["Transfer(address,address,uint256)"].topic,
@@ -33,13 +38,13 @@ const processor = new SubstrateBatchProcessor()
       pair.events["Burn(address,uint256,uint256,address)"].topic,
     ],
   });
-FACTORY_ADDRESSES.forEach((FACTORY_ADDRESS) => {
-  processor.addEvmLog(FACTORY_ADDRESS, {
-    filter: [
-      factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
-    ],
-  });
-});
+// FACTORY_ADDRESSES.forEach((FACTORY_ADDRESS) => {
+//   processor.addEvmLog(FACTORY_ADDRESS, {
+//     filter: [
+//       factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
+//     ],
+//   });
+// });
 
 // PAIR_ADDRESSES.forEach((PAIR_ADDRESS) => {
 //   processor.addEvmLog(PAIR_ADDRESS, {
