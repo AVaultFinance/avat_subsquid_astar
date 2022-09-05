@@ -18,7 +18,7 @@ import { Pair } from "./model";
 const database = new TypeormDatabase();
 const processor = new SubstrateBatchProcessor()
   .setBatchSize(100)
-  .setBlockRange({ from: 1424626 })
+  .setBlockRange({ from: 1326430 })
   .setDataSource({
     chain: CHAIN_NODE,
     archive: lookupArchive("astar", { release: "FireSquid" }),
@@ -109,15 +109,6 @@ async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
           default:
             break;
         }
-      } else {
-        ctx.log.info(
-          "PAIR_ADDRESSES_ERROR--: " +
-            contractAddress +
-            "-----" +
-            knownPairContracts.size +
-            "------" +
-            `${(await ctx.store.countBy(Pair, { id: contractAddress })) > 0}`
-        );
       }
   }
 }
