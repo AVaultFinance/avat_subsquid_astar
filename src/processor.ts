@@ -28,7 +28,7 @@ const processor = new SubstrateBatchProcessor()
       factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
     ],
   })
-  .addEvmLog("*", {
+  .addEvmLog("0x49d1DB92A8a1511A6eeb867221d801bC974A3073", {
     filter: [
       pair.events["Transfer(address,address,uint256)"].topic,
       pair.events["Sync(uint112,uint112)"].topic,
@@ -123,6 +123,7 @@ async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
         default:
           break;
       }
+    } else {
     }
   }
 }
