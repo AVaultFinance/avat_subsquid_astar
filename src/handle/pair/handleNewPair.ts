@@ -45,9 +45,10 @@ export async function handleNewPair(ctx: EvmLogHandlerContext<Store>) {
       const token0 = await getOrCreateToken(ctx, data.token0);
       const token1 = await getOrCreateToken(ctx, data.token1);
       await getOrCreateToken(ctx, pairAddress);
+      ctx.log.error("----factory----:" + factory?.id);
       const pair = new Pair({
         id: pairAddress,
-        factory,
+        factoryAddress: contractAddress,
         token0,
         token1,
         liquidityProviderCount: 0,

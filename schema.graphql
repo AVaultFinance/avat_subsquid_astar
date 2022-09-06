@@ -57,8 +57,7 @@ type Token @entity {
 type Pair @entity {
   "pair address"
   id: ID!
-  factory: Factory!
-
+  factoryAddress: String!
   "mirrored from the smart contract"
   token0: Token!
   token1: Token!

@@ -26,8 +26,8 @@ export async function handleSwap(ctx: EvmLogHandlerContext<Store>) {
   const bundle = await getBundle(ctx);
   const pair = (await getPair(ctx, contractAddress))!;
   if (!pair) return;
-  ctx.log.error(` pair.factory.id---: ${pair?.factory?.id}`);
-  const factory_address = pair?.factory?.id;
+  ctx.log.error(` pair.factory.id---: ${pair?.factoryAddress}`);
+  const factory_address = pair?.factoryAddress;
   if (!factory_address) return;
   const factory = (await getFactory(ctx, factory_address))!;
 

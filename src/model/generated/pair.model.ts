@@ -1,6 +1,5 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
 import * as marshal from "./marshal"
-import {Factory} from "./factory.model"
 import {Token} from "./token.model"
 import {PairHourData} from "./pairHourData.model"
 import {LiquidityPosition} from "./liquidityPosition.model"
@@ -21,9 +20,8 @@ export class Pair {
   @PrimaryColumn_()
   id!: string
 
-  @Index_()
-  @ManyToOne_(() => Factory, {nullable: false})
-  factory!: Factory
+  @Column_("text", {nullable: false})
+  factoryAddress!: string
 
   /**
    * mirrored from the smart contract
