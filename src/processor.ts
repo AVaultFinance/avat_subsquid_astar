@@ -4,7 +4,12 @@ import {
   SubstrateBatchProcessor,
 } from "@subsquid/substrate-processor";
 import { Store, TypeormDatabase } from "@subsquid/typeorm-store";
-import { CHAIN_NODE, FACTORY_ADDRESSES, PAIR_ADDRESSES } from "./config/consts";
+import {
+  CHAIN_NODE,
+  FACTORY_ADDRESS,
+  FACTORY_ADDRESSES,
+  PAIR_ADDRESSES,
+} from "./config/consts";
 import * as factoryABI from "./abis/factory";
 import * as pair from "./abis/pair";
 import { handleNewPair } from "./handle/pair/handleNewPair";
@@ -23,7 +28,7 @@ const processor = new SubstrateBatchProcessor()
     chain: CHAIN_NODE,
     archive: lookupArchive("astar", { release: "FireSquid" }),
   })
-  .addEvmLog("0xA9473608514457b4bF083f9045fA63ae5810A03E", {
+  .addEvmLog(FACTORY_ADDRESS, {
     filter: [
       factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
     ],

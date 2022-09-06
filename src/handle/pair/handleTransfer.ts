@@ -68,6 +68,8 @@ export async function handleTransfer(ctx: EvmLogHandlerContext<Store>) {
         to,
         liquidity: value.toString(),
         timestamp: new Date(ctx.block.timestamp),
+        amount0: ZERO_BD.toString(),
+        amount1: ZERO_BD.toString(),
       });
       await ctx.store.save(mint);
       transaction.mints = mints.concat([mint.id]);

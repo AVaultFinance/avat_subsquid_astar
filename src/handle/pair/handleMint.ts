@@ -15,7 +15,9 @@ import { createLiquidityPosition } from "../../store/liquiditPosition";
 import { createLiquiditySnapShot } from "../../store/liquiditySnapShot";
 import { getBundle } from "../../store/bundle";
 
-export async function handleMint(ctx: EvmLogHandlerContext<Store>) {
+export async function handleMint(
+  ctx: EvmLogHandlerContext<Store>
+): Promise<void> {
   // 当前交易hash
   const transaction = await ctx.store.get(Transaction, ctx.event.evmTxHash);
   if (!transaction) return;
