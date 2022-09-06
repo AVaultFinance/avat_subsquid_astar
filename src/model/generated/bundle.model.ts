@@ -10,7 +10,7 @@ export class Bundle {
   id!: string
 
   /**
-   * Price of ETH usd: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   nativePrice!: string

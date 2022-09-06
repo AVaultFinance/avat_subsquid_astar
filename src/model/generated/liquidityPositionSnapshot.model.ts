@@ -14,23 +14,14 @@ export class LiquidityPositionSnapshot {
 
   @Index_()
   @ManyToOne_(() => LiquidityPosition, {nullable: false})
-  liquidityPositions!: LiquidityPosition
+  liquidityPosition!: LiquidityPosition
 
-  /**
-   * Saved for fast historical lookups
-   */
   @Column_("timestamp with time zone", {nullable: false})
   timestamp!: Date
 
-  /**
-   * Saved for fast historical lookups
-   */
   @Column_("int4", {nullable: false})
   block!: number
 
-  /**
-   * Reference to user
-   */
   @Index_()
   @ManyToOne_(() => User, {nullable: false})
   user!: User
@@ -40,7 +31,7 @@ export class LiquidityPositionSnapshot {
   pair!: Pair
 
   /**
-   * Snapshot of token0 price: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   token0PriceUSD!: string
@@ -52,7 +43,7 @@ export class LiquidityPositionSnapshot {
   token1PriceUSD!: string
 
   /**
-   * Snapshot of pair token0 reserves: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   reserve0!: string
@@ -64,7 +55,7 @@ export class LiquidityPositionSnapshot {
   reserve1!: string
 
   /**
-   * Snapshot of pair reserves in USD: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   reserveUSD!: string
@@ -76,7 +67,7 @@ export class LiquidityPositionSnapshot {
   liquidityTokenTotalSupply!: string
 
   /**
-   * Snapshot of users pool token balance: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   liquidityTokenBalance!: string

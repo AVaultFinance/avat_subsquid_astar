@@ -1,5 +1,6 @@
 import { EvmLogHandlerContext } from "@subsquid/substrate-processor";
 import { Store } from "@subsquid/typeorm-store";
+import Big from "big.js";
 import * as factoryABI from "../../abis/factory";
 import {
   FACTORY_ADDRESSES,
@@ -39,16 +40,15 @@ export async function handleNewPair(ctx: EvmLogHandlerContext<Store>) {
     await ctx.store.save(factory);
 
     const pairAddress = data.pair.toLowerCase();
-    ctx.log.info(`FACTORY_ADDRESSES_SET: ${FACTORY_ADDRESSES}`);
+    ctx.log.info(`FACTORY_ADDRESSES_SET: ${contractAddress}`);
     if (PAIR_ADDRESSES.has(pairAddress)) {
-      ctx.log.info(`PAIR_ADDRESSES_SET: ${FACTORY_ADDRESSES}`);
+      ctx.log.info(`PAIR_ADDRESSES_SET: ${pairAddress}`);
       const token0 = await getOrCreateToken(ctx, data.token0);
       const token1 = await getOrCreateToken(ctx, data.token1);
       await getOrCreateToken(ctx, pairAddress);
-      ctx.log.error("----factory----:" + factory?.id);
       const pair = new Pair({
         id: pairAddress,
-        factoryAddress: contractAddress,
+        factoryAddress: factory.id,
         token0,
         token1,
         liquidityProviderCount: 0,

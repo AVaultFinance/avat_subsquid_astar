@@ -26,8 +26,8 @@ export async function handleSwap(ctx: EvmLogHandlerContext<Store>) {
   const bundle = await getBundle(ctx);
   const pair = (await getPair(ctx, contractAddress))!;
   if (!pair) return;
-  ctx.log.error(` pair.factory.id---: ${pair?.factoryAddress}`);
-  const factory_address = pair?.factoryAddress;
+  ctx.log.error(`Swap pair.factory.id---: ${pair.factoryAddress}`);
+  const factory_address = pair.factoryAddress;
   if (!factory_address) return;
   const factory = (await getFactory(ctx, factory_address))!;
 
@@ -203,10 +203,10 @@ export async function handleSwap(ctx: EvmLogHandlerContext<Store>) {
     .toString();
   await ctx.store.save(pairDayData);
 
-  pairHourData.hourlyVolumeTolen0 = BigDecimal(pairHourData.hourlyVolumeTolen0)
+  pairHourData.hourlyVolumeToken0 = BigDecimal(pairHourData.hourlyVolumeToken0)
     .plus(amount0Total)
     .toString();
-  pairHourData.hourlyVolumeTolen1 = BigDecimal(pairHourData.hourlyVolumeTolen1)
+  pairHourData.hourlyVolumeToken1 = BigDecimal(pairHourData.hourlyVolumeToken1)
     .plus(amount1Total)
     .toString();
   pairHourData.hourlyVolumeUSD = BigDecimal(pairHourData.hourlyVolumeUSD)

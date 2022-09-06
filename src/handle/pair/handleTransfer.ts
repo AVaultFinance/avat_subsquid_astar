@@ -63,7 +63,7 @@ export async function handleTransfer(ctx: EvmLogHandlerContext<Store>) {
     if (!mints.length || (await isCompleteMint(ctx, mints[mints.length - 1]))) {
       const mint = new Mint({
         id: `${transactionHash}-${mints.length}`,
-        transaction,
+        transaction: transaction,
         pair,
         to,
         liquidity: value.toString(),
@@ -83,13 +83,13 @@ export async function handleTransfer(ctx: EvmLogHandlerContext<Store>) {
     let burn: Burn;
     if (burns.length > 0) {
       const currentBurn = await ctx.store.get(Burn, burns[burns.length - 1]);
-      if (currentBurn?.needsComplate) {
+      if (currentBurn?.needsComplete) {
         burn = currentBurn;
       } else {
         burn = new Burn({
           id: `${transactionHash}-${burns.length}`,
           transaction,
-          needsComplate: false,
+          needsComplete: false,
           pair,
           liquidity: value.toString(),
           timestamp: new Date(ctx.block.timestamp),
@@ -99,7 +99,7 @@ export async function handleTransfer(ctx: EvmLogHandlerContext<Store>) {
       burn = new Burn({
         id: `${transactionHash}-${burns.length}`,
         transaction,
-        needsComplate: false,
+        needsComplete: false,
         pair,
         liquidity: value.toString(),
         timestamp: new Date(ctx.block.timestamp),
@@ -119,7 +119,7 @@ export async function handleTransfer(ctx: EvmLogHandlerContext<Store>) {
       transaction.mints = mints;
     }
     await ctx.store.save(burn);
-    if (burn.needsComplate) {
+    if (burn.needsComplete) {
       burns[burns.length - 1] = burn.id;
     } else {
       burns.push(burn.id);

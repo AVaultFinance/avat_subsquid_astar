@@ -3,6 +3,7 @@ import {
   EvmLogHandlerContext,
 } from "@subsquid/substrate-processor";
 import { Store } from "@subsquid/typeorm-store";
+import Big from "big.js";
 import { ZERO_BD } from "../config/consts";
 import { Pair, PairDayData, PairHourData } from "../model";
 
@@ -25,6 +26,7 @@ export async function updatePairDayData(ctx: EvmLogHandlerContext<Store>) {
   const dayPairID = `${contractAddress as string}-${dayID}`;
   const pair = (await ctx.store.get(Pair, contractAddress))!;
   let pairDayData = await ctx.store.get(PairDayData, dayPairID);
+  ctx.log.error("pair.token0:---" + JSON.stringify(pair.token0));
   if (!pairDayData) {
     pairDayData = new PairDayData({
       id: dayPairID,
@@ -59,8 +61,8 @@ export async function updatePairHourData(ctx: EvmLogHandlerContext<Store>) {
       id: dayPairID,
       hourStartUnix: BigInt(hourStartTimestamp),
       pair,
-      hourlyVolumeTolen0: ZERO_BD.toString(),
-      hourlyVolumeTolen1: ZERO_BD.toString(),
+      hourlyVolumeToken0: ZERO_BD.toString(),
+      hourlyVolumeToken1: ZERO_BD.toString(),
       hourlyVolumeUSD: ZERO_BD.toString(),
       hourlyTxns: 0,
     });

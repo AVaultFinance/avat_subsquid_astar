@@ -7,9 +7,6 @@ export class User {
     Object.assign(this, props)
   }
 
-  /**
-   * user address
-   */
   @PrimaryColumn_()
   id!: string
 
@@ -19,6 +16,6 @@ export class User {
   /**
    * BigDecimal
    */
-  @Column_("text", {nullable: true})
-  usdSwapped!: string | undefined | null
+  @Column_("text", {nullable: false})
+  usdSwapped!: string
 }

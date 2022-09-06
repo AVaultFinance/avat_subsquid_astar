@@ -8,9 +8,6 @@ export class LiquidityPosition {
     Object.assign(this, props)
   }
 
-  /**
-   * pair.id-user.id
-   */
   @PrimaryColumn_()
   id!: string
 

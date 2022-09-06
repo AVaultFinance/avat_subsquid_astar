@@ -23,7 +23,7 @@ export async function createLiquiditySnapShot(
 
   const snapshot = new LiquidityPositionSnapshot({
     id: `${position.id}${timestamp}`,
-    liquidityPositions: position,
+    liquidityPosition: position,
     timestamp: new Date(timestamp),
     block: ctx.block.height,
     user: position.user,

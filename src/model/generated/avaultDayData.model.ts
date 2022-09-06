@@ -21,17 +21,14 @@ export class AvaultDayData {
   @Column_("text", {nullable: false})
   dailyVolumeUntracked!: string
 
-  /**
-   * Accumulate at each trade, not just calculated off whatever totalVolume is, making it more accurate as it is a live conversion
-   */
-  @Column_("text", {nullable: false})
-  totalVolumeUSD!: string
-
   @Column_("text", {nullable: false})
   totalVolumeNative!: string
 
   @Column_("text", {nullable: false})
   totalLiquidityNative!: string
+
+  @Column_("text", {nullable: false})
+  totalVolumeUSD!: string
 
   @Column_("text", {nullable: false})
   totalLiquidityUSD!: string

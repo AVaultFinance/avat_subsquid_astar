@@ -14,18 +14,12 @@ export class Pair {
     Object.assign(this, props)
   }
 
-  /**
-   * pair address
-   */
   @PrimaryColumn_()
   id!: string
 
   @Column_("text", {nullable: false})
   factoryAddress!: string
 
-  /**
-   * mirrored from the smart contract
-   */
   @Index_()
   @ManyToOne_(() => Token, {nullable: false})
   token0!: Token
@@ -53,7 +47,7 @@ export class Pair {
   totalSupply!: string
 
   /**
-   * derived liquidity: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   reserveNative!: string
@@ -65,13 +59,13 @@ export class Pair {
   reserveUSD!: string
 
   /**
-   * Used for separating per pair reserves and global: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   trackedReserveNative!: string
 
   /**
-   * Price in terms of the asset pair: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   token0Price!: string
@@ -83,7 +77,7 @@ export class Pair {
   token1Price!: string
 
   /**
-   * lifetime volume stats: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   volumeToken0!: string
@@ -109,24 +103,15 @@ export class Pair {
   @Column_("int4", {nullable: false})
   txCount!: number
 
-  /**
-   * creation stats
-   */
   @Column_("timestamp with time zone", {nullable: false})
   createdAtTimestamp!: Date
 
   @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
   createdAtBlockNumber!: bigint
 
-  /**
-   * Filed used to help derived relationship -- used to detect new exchanges
-   */
   @Column_("int4", {nullable: false})
   liquidityProviderCount!: number
 
-  /**
-   * derived fields
-   */
   @OneToMany_(() => PairHourData, e => e.pair)
   pairHourData!: PairHourData[]
 

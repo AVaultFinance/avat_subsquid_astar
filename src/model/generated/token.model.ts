@@ -9,15 +9,9 @@ export class Token {
     Object.assign(this, props)
   }
 
-  /**
-   * Token Address
-   */
   @PrimaryColumn_()
   id!: string
 
-  /**
-   * mirrored from the smart contract
-   */
   @Column_("text", {nullable: false})
   symbol!: string
 
@@ -27,38 +21,38 @@ export class Token {
   @Column_("int4", {nullable: false})
   decimals!: number
 
-  /**
-   * used for other stats like marketcap
-   */
   @Column_("text", {nullable: false})
   totalSupply!: string
 
   /**
-   * token specific volume: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   tradeVolume!: string
 
+  /**
+   * BigDecimal
+   */
   @Column_("text", {nullable: false})
   tradeVolumeUSD!: string
 
+  /**
+   * BigDecimal
+   */
   @Column_("text", {nullable: false})
   untrackedVolumeUSD!: string
 
-  /**
-   * transactions across all pairs
-   */
   @Column_("int4", {nullable: false})
   txCount!: number
 
   /**
-   * liquidity across all pairs: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   totalLiquidity!: string
 
   /**
-   * derived prices: BigDecimal
+   * BigDecimal
    */
   @Column_("text", {nullable: false})
   derivedNative!: string

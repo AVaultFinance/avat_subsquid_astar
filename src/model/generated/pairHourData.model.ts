@@ -11,9 +11,6 @@ export class PairHourData {
   @PrimaryColumn_()
   id!: string
 
-  /**
-   * Unix timestamp for start of hour
-   */
   @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
   hourStartUnix!: bigint
 
@@ -21,35 +18,23 @@ export class PairHourData {
   @ManyToOne_(() => Pair, {nullable: false})
   pair!: Pair
 
-  /**
-   * Reserves
-   */
   @Column_("text", {nullable: false})
   reserve0!: string
 
   @Column_("text", {nullable: false})
   reserve1!: string
 
-  /**
-   * total supply for LP historical returns
-   */
   @Column_("text", {nullable: false})
   totalSupply!: string
 
-  /**
-   * derived liquidity
-   */
-  @Column_("text", {nullable: true})
-  reserveUSD!: string | undefined | null
-
-  /**
-   * volume stats
-   */
   @Column_("text", {nullable: false})
-  hourlyVolumeTolen0!: string
+  reserveUSD!: string
 
   @Column_("text", {nullable: false})
-  hourlyVolumeTolen1!: string
+  hourlyVolumeToken0!: string
+
+  @Column_("text", {nullable: false})
+  hourlyVolumeToken1!: string
 
   @Column_("text", {nullable: false})
   hourlyVolumeUSD!: string

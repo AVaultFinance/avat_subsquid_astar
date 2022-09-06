@@ -8,9 +8,6 @@ export class Swap {
     Object.assign(this, props)
   }
 
-  /**
-   * Transaction hash +'-'+index in swaps Transaction array
-   */
   @PrimaryColumn_()
   id!: string
 

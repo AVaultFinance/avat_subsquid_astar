@@ -109,17 +109,6 @@ async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
         default:
           break;
       }
-    } else {
-      ctx.log.info(
-        "PAIR_ADDRESSES_ERROR--: " +
-          contractAddress +
-          "-----" +
-          knownPairContracts.size +
-          "------" +
-          `${((await ctx.store.find(Pair)) ?? []).length}` +
-          "------" +
-          `${(await ctx.store.countBy(Pair, { id: contractAddress })) > 0}`
-      );
     }
   }
 }
