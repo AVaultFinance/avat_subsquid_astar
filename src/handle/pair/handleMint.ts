@@ -15,6 +15,7 @@ import { createLiquidityPosition } from "../../store/liquiditPosition";
 import { createLiquiditySnapShot } from "../../store/liquiditySnapShot";
 import { getBundle } from "../../store/bundle";
 import { updateFactoryDayData } from "../../store/factoryDayData";
+import { getOrCreateToken } from "../token/getOrCreateToken";
 
 export async function handleMint(
   ctx: EvmLogHandlerContext<Store>
@@ -23,7 +24,9 @@ export async function handleMint(
   // safety check
   if (!transaction) return;
   const { mints } = transaction;
+
   const mint = (await ctx.store.get(Mint, mints[mints.length - 1]))!;
+
   const contractAddress = ctx.event.args.address;
 
   const data = mintAbi.decode(ctx.event.args);
@@ -32,7 +35,9 @@ export async function handleMint(
   const factory_address = pair.factoryAddress;
   const factory = await getFactory(ctx, factory_address);
   if (!factory) return;
-  const { token0, token1 } = pair;
+  const { token0Address, token1Address } = pair;
+  const token0 = await getOrCreateToken(ctx, token0Address);
+  const token1 = await getOrCreateToken(ctx, token1Address);
   token0.txCount += 1;
   token1.txCount += 1;
 
@@ -65,6 +70,8 @@ export async function handleMint(
   mint.amount1 = token1Amount.toString();
   mint.logIndex = ctx.event.indexInBlock;
   mint.amountUSD = amountTotalUSD.toString();
+  mint.transaction = transaction;
+  mint.pair = pair;
   await ctx.store.save(mint);
 
   const user = (await ctx.store.get(User, mint.to))!;

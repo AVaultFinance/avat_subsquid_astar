@@ -30,8 +30,10 @@ export async function updateLiquidityPosition(
   let position = await getLiquiditPosition(ctx, `${pair.id}-${user.id}`);
   if (!position) {
     position = createLiquidityPosition(pair, user);
-    await ctx.store.save(position);
-    pair.liquidityProviderCount += 1;
   }
+  pair.liquidityProviderCount += 1;
+  position.pair = pair;
+  position.user = user;
+  await ctx.store.save(position);
   return position;
 }

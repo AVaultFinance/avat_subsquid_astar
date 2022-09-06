@@ -1,7 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToMany as OneToMany_} from "typeorm"
-import {TokenDayData} from "./tokenDayData.model"
-import {PairDayData} from "./pairDayData.model"
-import {Pair} from "./pair.model"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_} from "typeorm"
 
 @Entity_()
 export class Token {
@@ -56,19 +53,4 @@ export class Token {
    */
   @Column_("text", {nullable: false})
   derivedNative!: string
-
-  @OneToMany_(() => TokenDayData, e => e.token)
-  tokenDayData!: TokenDayData[]
-
-  @OneToMany_(() => PairDayData, e => e.token0)
-  pairDayDataBase!: PairDayData[]
-
-  @OneToMany_(() => PairDayData, e => e.token1)
-  pairDayDataQuote!: PairDayData[]
-
-  @OneToMany_(() => Pair, e => e.token0)
-  pairBase!: Pair[]
-
-  @OneToMany_(() => Pair, e => e.token1)
-  pairQuote!: Pair[]
 }

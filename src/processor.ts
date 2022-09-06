@@ -4,16 +4,11 @@ import {
   SubstrateBatchProcessor,
 } from "@subsquid/substrate-processor";
 import { Store, TypeormDatabase } from "@subsquid/typeorm-store";
-import {
-  CHAIN_NODE,
-  FACTORY_ADDRESS,
-  FACTORY_ADDRESSES,
-  PAIR_ADDRESSES,
-} from "./config/consts";
+import { CHAIN_NODE, FACTORY_ADDRESSES, PAIR_ADDRESSES } from "./config/consts";
 import * as factoryABI from "./abis/factory";
 import * as pair from "./abis/pair";
 import { handleNewPair } from "./handle/pair/handleNewPair";
-import { Pair, Token } from "./model";
+import { Pair } from "./model";
 import { handleTransfer } from "./handle/pair/handleTransfer";
 import { handleSync } from "./handle/pair/handleSync";
 import { handleSwap } from "./handle/pair/handleSwap";
@@ -23,16 +18,12 @@ import { handleBurn } from "./handle/pair/handleBurn";
 const database = new TypeormDatabase();
 const processor = new SubstrateBatchProcessor()
   .setBatchSize(100)
-  .setBlockRange({ from: 1326430 })
+  .setBlockRange({ from: 10000 })
   .setDataSource({
     chain: CHAIN_NODE,
     archive: lookupArchive("astar", { release: "FireSquid" }),
   })
-  .addEvmLog(FACTORY_ADDRESS, {
-    filter: [
-      factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
-    ],
-  })
+
   .addEvmLog("*", {
     filter: [
       [
@@ -45,6 +36,13 @@ const processor = new SubstrateBatchProcessor()
       ],
     ],
   });
+FACTORY_ADDRESSES.forEach((FACTORY_ADDRESS) => {
+  processor.addEvmLog(FACTORY_ADDRESS, {
+    filter: [
+      factoryABI.events["PairCreated(address,address,address,uint256)"].topic,
+    ],
+  });
+});
 
 processor.run(database, async (ctx) => {
   for (const block of ctx.blocks) {
@@ -83,11 +81,9 @@ async function tryIsPairInvolved(store: Store, address: string) {
 async function handleEvmLog(ctx: EvmLogHandlerContext<Store>) {
   const contractAddress = ctx.event.args.address.toLowerCase();
   if (FACTORY_ADDRESSES.has(contractAddress)) {
-    ctx.log.info("FACTORY_ADDRESSES--: " + contractAddress);
     await handleNewPair(ctx);
   } else if (PAIR_ADDRESSES.has(contractAddress)) {
     if (await isKnownPairContracts(ctx.store, contractAddress)) {
-      ctx.log.info("PAIR_ADDRESSES--: " + contractAddress);
       switch (ctx.event.args.topics[0]) {
         case pair.events["Transfer(address,address,uint256)"].topic:
           await handleTransfer(ctx);

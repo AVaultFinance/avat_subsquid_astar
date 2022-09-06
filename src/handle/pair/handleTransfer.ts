@@ -48,7 +48,7 @@ export async function handleTransfer(ctx: EvmLogHandlerContext<Store>) {
   if (!transaction) {
     transaction = new Transaction({
       id: transactionHash,
-      blockNumber: BigInt(ctx.block.height),
+      blockNumber: BigDecimal(ctx.block.height).toString(),
       timestamp: new Date(ctx.block.timestamp),
       mints: [],
       burns: [],
@@ -77,7 +77,7 @@ export async function handleTransfer(ctx: EvmLogHandlerContext<Store>) {
     }
   }
   // burn
-  if (from === ADDRESS_ZERO && from === pair.id) {
+  if (to === ADDRESS_ZERO && from === pair.id) {
     pair.totalSupply = BigDecimal(pair.totalSupply).minus(value).toString();
     const { burns } = transaction;
     let burn: Burn;
@@ -109,7 +109,7 @@ export async function handleTransfer(ctx: EvmLogHandlerContext<Store>) {
       mints.length !== 0 &&
       !(await isCompleteMint(ctx, mints[mints.length - 1]))
     ) {
-      const mint = await ctx.store.get(Mint, mints[mints.length - 2]);
+      const mint = await ctx.store.get(Mint, mints[mints.length - 1]);
       if (mint) {
         burn.feeTo = mint.to;
         burn.feeLiquidity = mint.liquidity;
@@ -144,7 +144,6 @@ export async function handleTransfer(ctx: EvmLogHandlerContext<Store>) {
       (await pairContract.balanceOf(from)).toBigInt(),
       paitToken.decimals
     ).toString();
-
     await ctx.store.save(position);
     await createLiquiditySnapShot(ctx, pair, position);
   }

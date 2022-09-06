@@ -1,7 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
-import * as marshal from "./marshal"
-import {Token} from "./token.model"
-import {PairHourData} from "./pairHourData.model"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToMany as OneToMany_} from "typeorm"
 import {LiquidityPosition} from "./liquidityPosition.model"
 import {LiquidityPositionSnapshot} from "./liquidityPositionSnapshot.model"
 import {Mint} from "./mint.model"
@@ -20,13 +17,11 @@ export class Pair {
   @Column_("text", {nullable: false})
   factoryAddress!: string
 
-  @Index_()
-  @ManyToOne_(() => Token, {nullable: false})
-  token0!: Token
+  @Column_("text", {nullable: false})
+  token0Address!: string
 
-  @Index_()
-  @ManyToOne_(() => Token, {nullable: false})
-  token1!: Token
+  @Column_("text", {nullable: false})
+  token1Address!: string
 
   /**
    * BigDecimal
@@ -106,14 +101,11 @@ export class Pair {
   @Column_("timestamp with time zone", {nullable: false})
   createdAtTimestamp!: Date
 
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  createdAtBlockNumber!: bigint
+  @Column_("text", {nullable: false})
+  createdAtBlockNumber!: string
 
   @Column_("int4", {nullable: false})
   liquidityProviderCount!: number
-
-  @OneToMany_(() => PairHourData, e => e.pair)
-  pairHourData!: PairHourData[]
 
   @OneToMany_(() => LiquidityPosition, e => e.pair)
   liquidityPositions!: LiquidityPosition[]

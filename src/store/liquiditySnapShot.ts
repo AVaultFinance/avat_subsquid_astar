@@ -17,8 +17,8 @@ export async function createLiquiditySnapShot(
   const bundle = await getBundle(ctx);
   const { timestamp } = ctx.block;
   if (!pair || !bundle) return;
-  const token0 = await ctx.store.get(Token, pair.token0.id);
-  const token1 = await ctx.store.get(Token, pair.token1.id);
+  const token0 = await ctx.store.get(Token, pair.token0Address);
+  const token1 = await ctx.store.get(Token, pair.token1Address);
   if (!token0 || !token1) return;
 
   const snapshot = new LiquidityPositionSnapshot({

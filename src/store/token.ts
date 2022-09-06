@@ -19,7 +19,7 @@ export async function updateTokenDayData(
     tokenDayData = new TokenDayData({
       id: tokenDayID,
       date: new Date(dayStartTimestamp),
-      token,
+      tokenAddress: token.id,
       priceUSD: BigDecimal(token.derivedNative)
         .times(bundle.nativePrice)
         .toString(),

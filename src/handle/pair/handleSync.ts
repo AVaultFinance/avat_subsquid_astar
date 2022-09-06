@@ -11,6 +11,8 @@ import {
   findNativePerToken,
   getNativePriceInUSD,
 } from "../../store/nativePrice";
+import { Token } from "../../model";
+import { getOrCreateToken } from "../token/getOrCreateToken";
 
 export async function handleSync(ctx: EvmLogHandlerContext<Store>) {
   const contractAddress = ctx.event.args.address.toLowerCase();
@@ -22,13 +24,15 @@ export async function handleSync(ctx: EvmLogHandlerContext<Store>) {
   const pair = await getPair(ctx, contractAddress);
   if (!pair) return;
 
-  ctx.log.error(`Sync pair.factory.id---: ${pair.factoryAddress}`);
   const factory_address = pair.factoryAddress;
   if (!factory_address) return;
   const factory = await getFactory(ctx, factory_address)!;
   if (!factory) return;
 
-  const { token0, token1 } = pair;
+  const { token0Address, token1Address } = pair;
+
+  const token0 = await getOrCreateToken(ctx, token0Address);
+  const token1 = await getOrCreateToken(ctx, token1Address);
   factory.totalLiquidityNative = BigDecimal(factory.totalLiquidityNative)
     .minus(pair.trackedReserveNative)
     .toString();

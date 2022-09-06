@@ -19,19 +19,20 @@ import { getTransaction } from "../../store/transaction";
 import { Swap, Transaction } from "../../model";
 import { updateFactoryDayData } from "../../store/factoryDayData";
 import { updateTokenDayData } from "../../store/token";
+import { getOrCreateToken } from "../token/getOrCreateToken";
 
 export async function handleSwap(ctx: EvmLogHandlerContext<Store>) {
-  const contractAddress = ctx.event.args.address;
+  const contractAddress = ctx.event.args.address.toLowerCase();
   const data = swapAbi.decode(ctx.event.args);
   const bundle = await getBundle(ctx);
   const pair = (await getPair(ctx, contractAddress))!;
   if (!pair) return;
-  ctx.log.error(`Swap pair.factory.id---: ${pair.factoryAddress}`);
   const factory_address = pair.factoryAddress;
   if (!factory_address) return;
   const factory = (await getFactory(ctx, factory_address))!;
-
-  const { token0, token1 } = pair;
+  const { token0Address, token1Address } = pair;
+  const token0 = await getOrCreateToken(ctx, token0Address);
+  const token1 = await getOrCreateToken(ctx, token1Address);
   const amount0In = convertTokenToDecimal(
     data.amount0In.toBigInt(),
     token0.decimals
@@ -142,7 +143,7 @@ export async function handleSwap(ctx: EvmLogHandlerContext<Store>) {
   if (!transaction) {
     transaction = new Transaction({
       id: ctx.event.evmTxHash,
-      blockNumber: BigInt(ctx.block.height),
+      blockNumber: BigDecimal(ctx.block.height).toString(),
       timestamp: new Date(ctx.block.timestamp),
       mints: [],
       swaps: [],

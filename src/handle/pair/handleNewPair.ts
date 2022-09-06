@@ -1,3 +1,4 @@
+import { Big as BigDecimal } from "big.js";
 import { EvmLogHandlerContext } from "@subsquid/substrate-processor";
 import { Store } from "@subsquid/typeorm-store";
 import Big from "big.js";
@@ -40,20 +41,18 @@ export async function handleNewPair(ctx: EvmLogHandlerContext<Store>) {
     await ctx.store.save(factory);
 
     const pairAddress = data.pair.toLowerCase();
-    ctx.log.info(`FACTORY_ADDRESSES_SET: ${contractAddress}`);
     if (PAIR_ADDRESSES.has(pairAddress)) {
-      ctx.log.info(`PAIR_ADDRESSES_SET: ${pairAddress}`);
       const token0 = await getOrCreateToken(ctx, data.token0);
       const token1 = await getOrCreateToken(ctx, data.token1);
       await getOrCreateToken(ctx, pairAddress);
       const pair = new Pair({
         id: pairAddress,
         factoryAddress: factory.id,
-        token0,
-        token1,
+        token0Address: token0.id,
+        token1Address: token1.id,
         liquidityProviderCount: 0,
         createdAtTimestamp: new Date(ctx.block.timestamp),
-        createdAtBlockNumber: BigInt(ctx.block.height),
+        createdAtBlockNumber: BigDecimal(ctx.block.height).toString(),
         txCount: 0,
         reserve0: ZERO_BD.toString(),
         reserve1: ZERO_BD.toString(),

@@ -13,7 +13,7 @@ export async function getPair(
 ) {
   const item = await ctx.store.get(Pair, {
     where: { id: address },
-    relations: { token0: true, token1: true },
+    // relations: { token0Address: true, token1Address: true },
   });
   return item;
 }
@@ -24,15 +24,14 @@ export async function updatePairDayData(ctx: EvmLogHandlerContext<Store>) {
   const dayID = parseInt((timestamp / 86_400_000).toString(), 10);
   const dayStartTimestamp = Number(dayID) * 86_400_000;
   const dayPairID = `${contractAddress as string}-${dayID}`;
-  const pair = (await ctx.store.get(Pair, contractAddress))!;
+  const pair = (await ctx.store.find(Pair, contractAddress))[0]!;
   let pairDayData = await ctx.store.get(PairDayData, dayPairID);
-  ctx.log.error("pair.token0:---" + JSON.stringify(pair.token0));
   if (!pairDayData) {
     pairDayData = new PairDayData({
       id: dayPairID,
       date: new Date(dayStartTimestamp),
-      token0: pair.token0,
-      token1: pair.token1,
+      token0Address: pair.token0Address,
+      token1Address: pair.token1Address,
       pairAddress: contractAddress,
       dailyVolumeToken0: ZERO_BD.toString(),
       dailyVolumeToken1: ZERO_BD.toString(),
@@ -60,7 +59,7 @@ export async function updatePairHourData(ctx: EvmLogHandlerContext<Store>) {
     pairHourData = new PairHourData({
       id: dayPairID,
       hourStartUnix: BigInt(hourStartTimestamp),
-      pair,
+      pairAddress: contractAddress,
       hourlyVolumeToken0: ZERO_BD.toString(),
       hourlyVolumeToken1: ZERO_BD.toString(),
       hourlyVolumeUSD: ZERO_BD.toString(),

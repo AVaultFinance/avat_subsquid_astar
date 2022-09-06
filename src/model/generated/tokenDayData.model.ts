@@ -1,5 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
-import {Token} from "./token.model"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_} from "typeorm"
 
 @Entity_()
 export class TokenDayData {
@@ -13,9 +12,8 @@ export class TokenDayData {
   @Column_("timestamp with time zone", {nullable: false})
   date!: Date
 
-  @Index_()
-  @ManyToOne_(() => Token, {nullable: false})
-  token!: Token
+  @Column_("text", {nullable: false})
+  tokenAddress!: string
 
   @Column_("text", {nullable: false})
   dailyVolumeToken!: string

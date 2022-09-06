@@ -19,6 +19,7 @@ import { createLiquiditySnapShot } from "../../store/liquiditySnapShot";
 import { updateTokenDayData } from "../../store/token";
 import { updateFactoryDayData } from "../../store/factoryDayData";
 import { getBundle } from "../../store/bundle";
+import { getOrCreateToken } from "../token/getOrCreateToken";
 
 export async function handleBurn(ctx: EvmLogHandlerContext<Store>) {
   const transaction = await ctx.store.get(Transaction, ctx.event.evmTxHash);
@@ -31,7 +32,6 @@ export async function handleBurn(ctx: EvmLogHandlerContext<Store>) {
   if (!pair) {
     return;
   }
-  ctx.log.error(` burn.pair.factory.id---: ${pair.factoryAddress}`);
   const factory_address = pair.factoryAddress;
   if (!factory_address) return;
   const factory = (await getFactory(ctx, factory_address))!;
@@ -39,7 +39,9 @@ export async function handleBurn(ctx: EvmLogHandlerContext<Store>) {
   pair.txCount += 1;
   factory.txCount += 1;
 
-  const { token0, token1 } = pair;
+  const { token0Address, token1Address } = pair;
+  const token0 = await getOrCreateToken(ctx, token0Address);
+  const token1 = await getOrCreateToken(ctx, token1Address);
   token0.txCount += 1;
   token1.txCount += 1;
   const token0Amount = convertTokenToDecimal(
@@ -75,6 +77,8 @@ export async function handleBurn(ctx: EvmLogHandlerContext<Store>) {
   burn.amount1 = token1Amount.toString();
   burn.logIndex = ctx.event.indexInBlock;
   burn.amountUSD = amountTotalUSD.toString();
+  burn.transaction = transaction;
+  burn.pair = pair;
   await ctx.store.save(burn);
 
   const liquiditPosition = createLiquidityPosition(pair, user);
