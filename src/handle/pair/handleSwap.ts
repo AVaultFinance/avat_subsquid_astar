@@ -25,6 +25,8 @@ export async function handleSwap(ctx: EvmLogHandlerContext<Store>) {
   const data = swapAbi.decode(ctx.event.args);
   const bundle = await getBundle(ctx);
   const pair = (await getPair(ctx, contractAddress))!;
+  if (!pair) return;
+
   const factory_address = pair.factory.id;
   const factory = (await getFactory(ctx, factory_address))!;
 

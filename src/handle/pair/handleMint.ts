@@ -24,13 +24,16 @@ export async function handleMint(
   // 当前交易存储的mint数据
   const { mints } = transaction;
   const mint = (await ctx.store.get(Mint, mints[mints.length - 1]))!;
-  const factory_address = mint.pair.factory.id;
+
   const contractAddress = ctx.event.args.address.toLowerCase();
+  const pair = await getPair(ctx, contractAddress);
+  if (!pair) return;
+
+  const factory_address = mint.pair.factory.id;
   const data = mintAbi.decode(ctx.event.args);
   const factory = await getFactory(ctx, factory_address);
   if (!factory) return;
-  const pair = await getPair(ctx, contractAddress);
-  if (!pair) return;
+
   const { token0, token1 } = pair;
   token0.txCount += 1;
   token1.txCount += 1;

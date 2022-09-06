@@ -27,10 +27,13 @@ export async function handleBurn(ctx: EvmLogHandlerContext<Store>) {
   const burn = (await ctx.store.get(Burn, burns[burns.length - 1]))!;
   const contractAddress = ctx.event.args.address.toLowerCase();
   const data = burnAbi.decode(ctx.event.args);
-  const factory_address = burn.pair.factory.id;
-
-  const factory = (await getFactory(ctx, factory_address))!;
   const pair = (await getPair(ctx, contractAddress))!;
+  if (!pair) {
+    return;
+  }
+  const factory_address = burn.pair.factory.id;
+  const factory = (await getFactory(ctx, factory_address))!;
+
   pair.txCount += 1;
   factory.txCount += 1;
 
