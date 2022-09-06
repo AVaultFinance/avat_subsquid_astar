@@ -17,7 +17,7 @@ import {
 } from "../../config/consts";
 import { getTransaction } from "../../store/transaction";
 import { Swap, Transaction } from "../../model";
-import { updateAvaultDayData } from "../../store/avaultDayData";
+import { updateFactoryDayData } from "../../store/factoryDayData";
 import { updateTokenDayData } from "../../store/token";
 
 export async function handleSwap(ctx: EvmLogHandlerContext<Store>) {
@@ -175,22 +175,24 @@ export async function handleSwap(ctx: EvmLogHandlerContext<Store>) {
 
   const pairDayData = await updatePairDayData(ctx);
   const pairHourData = await updatePairHourData(ctx);
-  const avaultDayData = await updateAvaultDayData(ctx, factory_address);
+  const factoryDayData = await updateFactoryDayData(ctx, factory_address);
   const token0DayData = await updateTokenDayData(ctx, token0);
   const token1DayData = await updateTokenDayData(ctx, token1);
 
-  avaultDayData.dailyVolumeUSD = BigDecimal(avaultDayData.dailyVolumeUSD)
+  factoryDayData.dailyVolumeUSD = BigDecimal(factoryDayData.dailyVolumeUSD)
     .plus(trackedAmountUSD)
     .toString();
-  avaultDayData.dailyVolumeNative = BigDecimal(avaultDayData.dailyVolumeNative)
+  factoryDayData.dailyVolumeNative = BigDecimal(
+    factoryDayData.dailyVolumeNative
+  )
     .plus(trackedAmountETH)
     .toString();
-  avaultDayData.dailyVolumeUntracked = BigDecimal(
-    avaultDayData.dailyVolumeUntracked
+  factoryDayData.dailyVolumeUntracked = BigDecimal(
+    factoryDayData.dailyVolumeUntracked
   )
     .plus(derivedAmountUSD)
     .toString();
-  await ctx.store.save(avaultDayData);
+  await ctx.store.save(factoryDayData);
 
   pairDayData.dailyVolumeToken0 = BigDecimal(pairDayData.dailyVolumeToken0)
     .plus(amount0Total)

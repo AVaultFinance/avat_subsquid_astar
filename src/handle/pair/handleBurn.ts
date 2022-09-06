@@ -17,7 +17,7 @@ import {
 } from "../../store/liquiditPosition";
 import { createLiquiditySnapShot } from "../../store/liquiditySnapShot";
 import { updateTokenDayData } from "../../store/token";
-import { updateAvaultDayData } from "../../store/avaultDayData";
+import { updateFactoryDayData } from "../../store/factoryDayData";
 import { getBundle } from "../../store/bundle";
 
 export async function handleBurn(ctx: EvmLogHandlerContext<Store>) {
@@ -84,5 +84,5 @@ export async function handleBurn(ctx: EvmLogHandlerContext<Store>) {
   await updatePairHourData(ctx);
   await updateTokenDayData(ctx, token0);
   await updateTokenDayData(ctx, token1);
-  await updateAvaultDayData(ctx, factory_address);
+  await updateFactoryDayData(ctx, factory_address);
 }

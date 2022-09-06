@@ -14,7 +14,7 @@ import { convertTokenToDecimal } from "../../utils/number";
 import { createLiquidityPosition } from "../../store/liquiditPosition";
 import { createLiquiditySnapShot } from "../../store/liquiditySnapShot";
 import { getBundle } from "../../store/bundle";
-import { updateAvaultDayData } from "../../store/avaultDayData";
+import { updateFactoryDayData } from "../../store/factoryDayData";
 
 export async function handleMint(
   ctx: EvmLogHandlerContext<Store>
@@ -75,7 +75,7 @@ export async function handleMint(
   // update day entities
   await updatePairDayData(ctx);
   await updatePairHourData(ctx);
-  await updateAvaultDayData(ctx, factory_address);
+  await updateFactoryDayData(ctx, factory_address);
   await updateTokenDayData(ctx, token0);
   await updateTokenDayData(ctx, token1);
 }

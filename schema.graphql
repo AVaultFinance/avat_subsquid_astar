@@ -1,3 +1,17 @@
+type AvaultInfo @entity {
+  id: ID!
+  updatedDate: DateTime!
+  "BigDecimal"
+  totalVolumeUSD: String!
+  "BigDecimal"
+  totalTvlUSD: String!
+  # transactions
+  txCount: Int!
+
+  factory: Factory!
+  stableSwapInfo: StableSwapInfo!
+}
+
 type Factory @entity {
   # factory address
   id: ID!
@@ -23,6 +37,161 @@ type Factory @entity {
 
   # transactions
   txCount: Int!
+}
+
+type StableSwapInfo @entity {
+  id: ID!
+  poolCount: Int!
+
+  # total volume
+  "BigDecimal"
+  totalVolumeUSD: String!
+
+  "BigDecimal"
+  totalTvlUSD: String!
+  # transactions
+  txCount: Int!
+
+  swaps: [StableSwap!]! @derivedFrom(field: "stableSwapInfo")
+}
+
+type StableSwap @entity {
+  id: ID!
+
+  # swap address
+  address: Bytes!
+
+  # base swap address
+  baseSwapAddress: Bytes!
+
+  # number of tokens supported
+  numTokens: Int!
+
+  # supported tokens
+  tokens: [String!]!
+
+  # supported base tokens (for SwapNormal, this is same as tokens; for MetaSwap, this is the corresbonding base pool tokens)
+  baseTokens: [String!]!
+
+  # supported all tokens (metapool tokens plus basepool tokens)
+  allTokens: [String!]!
+
+  # token balances
+  balances: [BigInt!]!
+
+  # liquidity provider token
+  lpToken: Bytes!
+
+  # amplification coefficient
+  a: BigInt!
+
+  swapFee: BigInt!
+  adminFee: BigInt!
+
+  virtualPrice: BigInt!
+
+  stableSwapInfo: StableSwapInfo!
+
+  events: [StableSwapEvent!] @derivedFrom(field: "stableSwap")
+
+  exchanges: [StableSwapExchange!] @derivedFrom(field: "stableSwap")
+
+  stableSwapDayData: [StableSwapDayData!] @derivedFrom(field: "stableSwap")
+
+  "BigDecimal"
+  tvlUSD: String!
+  "BigDecimal"
+  volumeUSD: String!
+}
+
+type StableSwapEvent @entity {
+  id: ID!
+
+  stableSwap: StableSwap!
+
+  data: StableSwapEventData
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+union StableSwapEventData =
+    StableSwapNewFeeEventData
+  | StableSwapRampAEventData
+  | StableSwapStopRampAEventData
+  | StableSwapAddLiquidityEventData
+  | StableSwapRemoveLiquidityEventData
+  | StableSwapFlashLoanEventData
+
+type StableSwapNewFeeEventData {
+  swapFee: BigInt!
+  adminFee: BigInt!
+}
+
+type StableSwapRampAEventData {
+  oldA: BigInt!
+  newA: BigInt!
+  initialTime: BigInt!
+  futureTime: BigInt!
+}
+
+type StableSwapStopRampAEventData {
+  currentA: BigInt!
+  time: BigInt!
+}
+
+type StableSwapAddLiquidityEventData {
+  provider: Bytes!
+  tokenAmounts: [BigInt!]!
+  fees: [BigInt!]!
+  invariant: BigInt
+  lpTokenSupply: BigInt!
+}
+
+type StableSwapRemoveLiquidityEventData {
+  provider: Bytes!
+  tokenAmounts: [BigInt!]!
+  fees: [BigInt!]
+  lpTokenSupply: BigInt
+}
+
+type StableSwapFlashLoanEventData {
+  caller: Bytes!
+  receiver: Bytes!
+  amountsOut: [BigInt!]!
+}
+
+type StableSwapExchange @entity {
+  id: ID!
+
+  stableSwap: StableSwap!
+
+  data: StableSwapExchangeData
+
+  block: BigInt!
+  timestamp: BigInt!
+  transaction: Bytes!
+}
+
+union StableSwapExchangeData =
+    StableSwapTokenExchangeData
+  | StableSwapTokenExchangeUnderlyingData
+
+type StableSwapTokenExchangeData {
+  buyer: Bytes!
+  boughtId: BigInt!
+  tokensBought: BigInt!
+  soldId: BigInt!
+  tokensSold: BigInt!
+}
+
+type StableSwapTokenExchangeUnderlyingData {
+  buyer: Bytes!
+  boughtId: BigInt!
+  tokensBought: BigInt!
+  soldId: BigInt!
+  tokensSold: BigInt!
 }
 
 type Token @entity {
@@ -246,7 +415,7 @@ type Bundle @entity {
   nativePrice: String! # price of ETH usd
 }
 
-type AvaultDayData @entity {
+type FactoryDayData @entity {
   id: ID! # timestamp rounded to current day by dividing by 86400
   date: DateTime!
 
@@ -326,4 +495,32 @@ type TokenDayData @entity {
 
   # price stats
   priceUSD: String!
+}
+
+type StableSwapDayData @entity {
+  id: ID!
+  date: DateTime!
+  stableSwap: StableSwap!
+
+  dailyVolumeUSD: String!
+  tvlUSD: String!
+}
+
+type StableDayData @entity {
+  id: ID!
+  date: DateTime!
+
+  dailyVolumeUSD: String!
+  tvlUSD: String!
+}
+
+type AvaultDayInfo @entity {
+  id: ID!
+  date: DateTime!
+
+  standardInfo: FactoryDayData!
+  stableInfo: StableSwapDayData!
+
+  dailyVolumeUSD: String!
+  tvlUSD: String!
 }

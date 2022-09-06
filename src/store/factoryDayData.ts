@@ -1,9 +1,9 @@
 import { EvmLogHandlerContext } from "@subsquid/substrate-processor";
 import { Store } from "@subsquid/typeorm-store";
 import { ZERO_BD } from "../config/consts";
-import { AvaultDayData, Factory } from "../model";
+import { FactoryDayData, Factory } from "../model";
 
-export async function updateAvaultDayData(
+export async function updateFactoryDayData(
   ctx: EvmLogHandlerContext<Store>,
   factory_address: string
 ) {
@@ -11,9 +11,9 @@ export async function updateAvaultDayData(
   const { timestamp } = ctx.block;
   const dayID = parseInt((timestamp / 86_400_000).toString(), 10);
   const dayStartTimestamp = Number(dayID) * 86_400_000;
-  let avaultDayData = await ctx.store.get(AvaultDayData, dayID.toString());
-  if (!avaultDayData) {
-    avaultDayData = new AvaultDayData({
+  let factoryDayData = await ctx.store.get(FactoryDayData, dayID.toString());
+  if (!factoryDayData) {
+    factoryDayData = new FactoryDayData({
       id: dayID.toString(),
       date: new Date(dayStartTimestamp),
       dailyVolumeUSD: ZERO_BD.toString(),
@@ -23,9 +23,9 @@ export async function updateAvaultDayData(
       dailyVolumeUntracked: ZERO_BD.toString(),
     });
   }
-  avaultDayData.totalLiquidityUSD = factory.totalLiquidityUSD;
-  avaultDayData.totalLiquidityNative = factory.totalLiquidityNative;
-  avaultDayData.txCount = factory.txCount;
-  await ctx.store.save(avaultDayData);
-  return avaultDayData;
+  factoryDayData.totalLiquidityUSD = factory.totalLiquidityUSD;
+  factoryDayData.totalLiquidityNative = factory.totalLiquidityNative;
+  factoryDayData.txCount = factory.txCount;
+  await ctx.store.save(factoryDayData);
+  return factoryDayData;
 }
