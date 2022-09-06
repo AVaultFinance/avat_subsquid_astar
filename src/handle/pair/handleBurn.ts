@@ -31,7 +31,9 @@ export async function handleBurn(ctx: EvmLogHandlerContext<Store>) {
   if (!pair) {
     return;
   }
-  const factory_address = burn.pair.factory.id;
+  ctx.log.error(` burn.pair.factory.id---: ${burn?.pair?.factory?.id}`);
+  const factory_address = burn?.pair?.factory?.id;
+  if (!factory_address) return;
   const factory = (await getFactory(ctx, factory_address))!;
 
   pair.txCount += 1;

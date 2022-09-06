@@ -21,7 +21,10 @@ export async function handleSync(ctx: EvmLogHandlerContext<Store>) {
 
   const pair = await getPair(ctx, contractAddress);
   if (!pair) return;
-  const factory_address = pair.factory.id;
+
+  ctx.log.error(` pair.factory.id---: ${pair?.factory?.id}`);
+  const factory_address = pair?.factory?.id;
+  if (!factory_address) return;
   const factory = await getFactory(ctx, factory_address)!;
   if (!factory) return;
 

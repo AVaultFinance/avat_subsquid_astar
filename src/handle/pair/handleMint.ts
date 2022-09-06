@@ -29,7 +29,10 @@ export async function handleMint(
   const pair = await getPair(ctx, contractAddress);
   if (!pair) return;
 
-  const factory_address = mint.pair.factory.id;
+  ctx.log.error(` mint.pair.factory---: ${mint?.pair?.factory?.id}`);
+
+  const factory_address = mint?.pair?.factory?.id;
+  if (!factory_address) return;
   const data = mintAbi.decode(ctx.event.args);
   const factory = await getFactory(ctx, factory_address);
   if (!factory) return;
